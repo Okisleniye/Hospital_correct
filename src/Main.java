@@ -16,7 +16,8 @@ public class Main {
             System.out.println("2. Add Doctor");
             System.out.println("3. View All Registered Personnel");
             System.out.println("4. Demonstrate Polymorphism");
-            System.out.println("5. Exit");
+            System.out.println("5. Search and Downcast (Instanceof)"); // New Option
+            System.out.println("6. Exit");
             System.out.print("Select an option: ");
 
             int choice = sc.nextInt();
@@ -40,20 +41,39 @@ public class Main {
                     people.add(new Doctor(dId, dName, dEmail, dSpec, dExp));
                     break;
                 case 3:
-                    System.out.println("\n--- All Personnel List ---");
-                    for (Person p : people) {
-                        System.out.println(p);
-                    }
+                    for (Person p : people) { System.out.println(p); }
                     break;
                 case 4:
-                    System.out.println("\n--- Polymorphism Demo ---");
-                    for (Person p : people) {
-                        p.displayRole();
-                    }
+                    for (Person p : people) { p.displayRole(); }
                     break;
-                case 5:
+                case 5: //Downcasting
+                    System.out.print("Enter ID to search details: ");
+                    int searchId = sc.nextInt();
+                    sc.nextLine();
+                    boolean found = false;
+
+                    for (Person p : people) {
+                        if (p.getId() == searchId) {
+                            found = true;
+                            System.out.println("Common Info: " + p.getName());
+
+                            // Instanceof check
+                            if (p instanceof Doctor) {
+                                //  Downcasting
+                                Doctor d = (Doctor) p;
+                                System.out.println("Specific Info: Specialist in " + d.getSpecialization());
+                            }
+                            else if (p instanceof Patients) {
+                                //  Downcasting
+                                Patients pat = (Patients) p;
+                                System.out.println("Specific Info: Blood Type " + pat.getBloodType());
+                            }
+                        }
+                    }
+                    if (!found) System.out.println("ID not found.");
+                    break;
+                case 6:
                     running = false;
-                    System.out.println("Exiting System...");
                     break;
                 default:
                     System.out.println("Invalid option.");
