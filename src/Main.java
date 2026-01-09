@@ -1,30 +1,63 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== Connected Hospital System ===");
-        System.out.println();
+        ArrayList<Person> people = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
 
-        Patients p1 = new Patients(101, "Amanat Almas", 75, "O+");
-        Doctor d1 = new Doctor(501, "Dr. Arman", "Cardiology", 12);
+        people.add(new Patients(1, "John Smith", "john@email.com", 25, "O+"));
+        people.add(new Doctor(101, "Dr. Adams", "adams@hospital.com", "Cardiology", 12));
 
-        Appointment a1 = new Appointment(9001, p1, d1, "2025-12-27");
+        boolean running = true;
+        while (running) {
+            System.out.println("\n--- Hospital Management System ---");
+            System.out.println("1. Add Patient");
+            System.out.println("2. Add Doctor");
+            System.out.println("3. View All Registered Personnel");
+            System.out.println("4. Demonstrate Polymorphism");
+            System.out.println("5. Exit");
+            System.out.print("Select an option: ");
 
-        System.out.println("--- CONNECTION TEST ---");
-        System.out.println(a1);
-        System.out.println("Accessing Patient name through Appointment: " + a1.getPatient().getFullName());
-        System.out.println("Accessing Doctor specialty through Appointment: " + a1.getDoctor().getSpecialization());
-        System.out.println();
+            int choice = sc.nextInt();
+            sc.nextLine();
 
-        System.out.println("--- TESTING CROSS-CLASS LOGIC ---");
-        System.out.println("Current Status: " + a1.getStatus());
-        a1.checkUrgency();
-        System.out.println("Updated Status based on Patient/Doctor data: " + a1.getStatus());
-        System.out.println();
-
-        System.out.println("--- UPDATING CONNECTED OBJECTS ---");
-        a1.getPatient().setAge(76);
-        a1.reschedule("2026-01-05");
-        System.out.println(a1);
-
-        System.out.println("\n=== Program Complete ===");
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter ID: "); int pId = sc.nextInt(); sc.nextLine();
+                    System.out.print("Enter Name: "); String pName = sc.nextLine();
+                    System.out.print("Enter Email: "); String pEmail = sc.nextLine();
+                    System.out.print("Enter Age: "); int pAge = sc.nextInt(); sc.nextLine();
+                    System.out.print("Enter Blood Type: "); String pBlood = sc.nextLine();
+                    people.add(new Patients(pId, pName, pEmail, pAge, pBlood));
+                    break;
+                case 2:
+                    System.out.print("Enter ID: "); int dId = sc.nextInt(); sc.nextLine();
+                    System.out.print("Enter Name: "); String dName = sc.nextLine();
+                    System.out.print("Enter Email: "); String dEmail = sc.nextLine();
+                    System.out.print("Enter Specialization: "); String dSpec = sc.nextLine();
+                    System.out.print("Enter Years Experience: "); int dExp = sc.nextInt(); sc.nextLine();
+                    people.add(new Doctor(dId, dName, dEmail, dSpec, dExp));
+                    break;
+                case 3:
+                    System.out.println("\n--- All Personnel List ---");
+                    for (Person p : people) {
+                        System.out.println(p);
+                    }
+                    break;
+                case 4:
+                    System.out.println("\n--- Polymorphism Demo ---");
+                    for (Person p : people) {
+                        p.displayRole();
+                    }
+                    break;
+                case 5:
+                    running = false;
+                    System.out.println("Exiting System...");
+                    break;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
     }
 }
