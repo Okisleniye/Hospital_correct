@@ -6,14 +6,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class HospitalMenu implements Menu {
-    private ArrayList<Staff>allStaff;
+    private ArrayList<Staff> allStaff;
     private Scanner scanner;
 
-    public HospitalMenu(){
-        this.allStaff=new ArrayList<>();
-        this.scanner=new Scanner(System.in);
+    public HospitalMenu() {
+        this.allStaff = new ArrayList<>();
+        this.scanner = new Scanner(System.in);
 
-
+        try {
+            allStaff.add(new Doctor(3, "Madina", 850000, 8, "cardiosurgion"));
+            allStaff.add(new Nurse(3, "Tolganayi", 360000, 1, 2));
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error initializing test data: " + e.getMessage());
+        }
     }
     @Override
     public void displayMenu(){
@@ -25,15 +30,18 @@ public class HospitalMenu implements Menu {
         System.out.println("3. Staff work");
         System.out.println("4. View Doctors");
         System.out.println("5. View Nurses");
+        System.out.println("6. View All Staff");
         System.out.println("0. Exit");
     }
 
     @Override
     public void run() {
         boolean running = true;
+
         while(running) {
             displayMenu();
             System.out.println("Enter choice: ");
+
             try {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
@@ -44,6 +52,7 @@ public class HospitalMenu implements Menu {
                     case 3: staffWork(); break;
                     case 4: viewDoctors(); break;
                     case 5: viewNurses(); break;
+                    case 6: viewAllStaff(); break;
                     case 0: running=false;break;
                     default:
                         System.out.println("Invalid!");
@@ -56,33 +65,32 @@ public class HospitalMenu implements Menu {
         scanner.close();
     }
 
-    // ===== MENU METHODS =====
-
-
-
     private void addDoctor() {
         try {
-            System.out.print("ID: ");
+            System.out.println("id");
             int id = scanner.nextInt();
             scanner.nextLine();
 
-            System.out.print("Name: ");
+            System.out.println("name");
             String name = scanner.nextLine();
+            scanner.nextLine();
 
-            System.out.print("Salary: ");
+            System.out.println("salary");
             double salary = scanner.nextDouble();
+            scanner.nextLine();
 
-            System.out.print("Experience years: ");
+            System.out.println("exp");
             int exp = scanner.nextInt();
             scanner.nextLine();
 
-            System.out.print("Specialization: ");
+            System.out.println("specialization");
             String spec = scanner.nextLine();
+            scanner.nextLine();
 
             Staff doctor = new Doctor(id, name, salary, exp, spec);
             allStaff.add(doctor);
-            System.out.println("Doctor added!");
-        }catch (IllegalArgumentException e){
+            System.out.println("doctor added");
+        } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -107,7 +115,7 @@ public class HospitalMenu implements Menu {
 
             Staff nurse = new Nurse(id, name, salary, exp, patients);
             allStaff.add(nurse);
-            System.out.println("model.Nurse added!");
+            System.out.println("Nurse added!");
         } catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
@@ -115,14 +123,14 @@ public class HospitalMenu implements Menu {
 
 
     private void staffWork() {
-        System.out.println("\n--- Staff work ---");
-        for (Staff m : allStaff) {
+        for(Staff m : allStaff) {
             m.work();
         }
     }
 
+
     private void viewDoctors() {
-        System.out.println("\n--- DOCTORS ONLY ---");
+        System.out.println("");
         for (Staff m : allStaff) {
             if (m instanceof Doctor d) {
                 System.out.println(d);
@@ -136,6 +144,27 @@ public class HospitalMenu implements Menu {
             if (m instanceof Nurse n) {
                 System.out.println(n);
             }
+        }
+    }
+
+    private void viewAllStaff(){
+        for (int i = 0; i<allStaff.size(); i++){
+            Staff s = allStaff.get(i);
+
+            System.out.println((i + 1) + ". " + s);
+            if (s instanceof Nurse){
+                Nurse nurse = (Nurse) s;
+                if (nurse.isHeadNurse()){
+                    System.out.println(nurse.getName() + " is head nurse");
+                }
+                else if(s instanceof Doctor){
+                    Doctor doctor = (Doctor) s;
+                    if(doctor.isSeniorDoctor()){
+                        System.out.println(doctor.getName() + " is senior doctor");
+                    }
+                }
+            }
+            System.out.println();
         }
     }
 }
