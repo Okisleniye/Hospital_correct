@@ -1,6 +1,8 @@
 package database;
 
-import model.*;
+import model.Doctor;
+import model.Nurse;
+import model.Staff;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,92 +11,57 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * StaffDAO - Week 8 Enhanced
- * Complete CRUD operations + Advanced Search
- * - CREATE (INSERT) ✓
- * - READ (SELECT) ✓
- * - UPDATE ✓ NEW!
- * - DELETE ✓ NEW!
- * - SEARCH by name ✓ NEW!
- * - SEARCH by salary range ✓ NEW!
- */
 public class StaffDAO {
 
-    // ========================================
-    // CREATE - INSERT OPERATIONS (Week 7)
-    // ========================================
-
-    /**
-     * INSERT Chef into database
-     */
     public boolean insertDoctor(Doctor doctor) {
-        String sql = "INSERT INTO staff (int staffId, String name, double salary, int experienceYears, String specialization) " +
-                "VALUES (?, ?, ?, 'Doctor', ?, NULL)";
+        String sql = "INSERT INTO staff (staff_id, name, salary, experience_years, staff_type, specialization) " +
+                "VALUES (?, ?, ?, ?, 'DOCTOR', ?)";
 
         Connection connection = DatabaseConnection.getConnection();
         if (connection == null) return false;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, doctor.getName());
-            statement.setDouble(2, doctor.getSalary());
-            statement.setInt(3, doctor.getExperienceYears());
-            statement.setString(4, doctor.getSpecialization());
-            statement.setInt(5, doctor.getStaffId());
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, doctor.getStaffId());
+            statement.setString(2, doctor.getName());
+            statement.setDouble(3, doctor.getSalary());
+            statement.setInt(4, doctor.getExperienceYears());
+            statement.setString(5, doctor.getSpecialization());
 
             int rowsInserted = statement.executeUpdate();
-            statement.close();
-
-            if (rowsInserted > 0) {
-                System.out.println("✅ Doctor inserted: " + doctor.getName());
-                return true;
-            }
-
+            return rowsInserted > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Insert Doctor failed!");
             e.printStackTrace();
+            return false;
         } finally {
             DatabaseConnection.closeConnection(connection);
         }
-
-        return false;
     }
 
     /**
      * INSERT Waiter into database
      */
     public boolean insertNurse(Nurse nurse) {
-        String sql = "INSERT INTO staff (int staffId, String name, double salary, int experienceYears, int patientsAssigned) " +
-                "VALUES (?, ?, ?, 'NURSE', NULL, ?)";
+        String sql = "INSERT INTO staff (staff_id, name, salary, experience_years, staff_type, patients_assigned) " +
+                "VALUES (?, ?, ?, ?, 'NURSE', ?)";
 
         Connection connection = DatabaseConnection.getConnection();
         if (connection == null) return false;
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, nurse.getName());
-            statement.setDouble(2, nurse.getSalary());
-            statement.setInt(3, nurse.getExperienceYears());
-            statement.setInt(4, nurse.getPatientsAssigned());
-            statement.setInt(4, nurse.getStaffId());
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, nurse.getStaffId());
+            statement.setString(2, nurse.getName());
+            statement.setDouble(3, nurse.getSalary());
+            statement.setInt(4, nurse.getExperienceYears());
+            statement.setInt(5, nurse.getPatientsAssigned()); // Fixed index 5
 
             int rowsInserted = statement.executeUpdate();
-            statement.close();
-
-            if (rowsInserted > 0) {
-                System.out.println("✅ Nurse inserted: " + nurse.getName());
-                return true;
-            }
-
+            return rowsInserted > 0;
         } catch (SQLException e) {
-            System.out.println("❌ Insert Nurse failed!");
             e.printStackTrace();
+            return false;
         } finally {
             DatabaseConnection.closeConnection(connection);
         }
-
-        return false;
     }
 
     // ========================================
@@ -222,7 +189,7 @@ public class StaffDAO {
      */
     public List<Nurse> getAllNurse() {
         List<Nurse> nurses = new ArrayList<>();
-        String sql = "SELECT * FROM staff WHERE staff_type = 'WAITER' ORDER BY staff_id";
+        String sql = "SELECT * FROM staff WHERE staff_type = 'NURSE' ORDER BY staff_id";
 
         Connection connection = DatabaseConnection.getConnection();
         if (connection == null) return nurses;
@@ -257,18 +224,12 @@ public class StaffDAO {
     // WEEK 8: UPDATE OPERATION
     // ========================================
 
-    /**
-     * UPDATE Chef in database
-     * @param chef Chef object with updated data
-     * @return true if successful
-     */
-
     // CHEF from DB
     // CHEF set change
     // update chef
     public boolean updateDoctor(Doctor doctor) {
-        String sql = "UPDATE staff SET name = ?, salary = ?, experienceYears = ?, specialization = ? " +
-                "WHERE staffId = ? AND staff_type = 'DOCTOR'";
+        String sql = "UPDATE staff SET name = ?, salary = ?, experience_years = ?, specialization = ? " +
+                "WHERE staff_id = ? AND staff_type = 'DOCTOR'";
 
         Connection connection = DatabaseConnection.getConnection();
         if (connection == null) return false;
@@ -303,11 +264,11 @@ public class StaffDAO {
 
     /**
      * UPDATE Waiter in database
-     * @param waiter Waiter object with updated data
+     object with updated data
      * @return true if successful
      */
     public boolean updateNurse(Nurse nurse) {
-        String sql = "UPDATE staff SET name = ?, salary = ?, experience_years = ?, patientsAssigned = ? " +
+        String sql = "UPDATE staff SET name = ?, salary = ?, experience_years = ?, patients_assigned = ? " +
                 "WHERE staff_id = ? AND staff_type = 'NURSE'";
 
         Connection connection = DatabaseConnection.getConnection();

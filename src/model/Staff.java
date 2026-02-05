@@ -1,8 +1,6 @@
 package model;
 
-import javax.lang.model.element.Name;
-
-public abstract class Staff {
+public abstract class   Staff {
 
     protected int staffId;
     protected String name;
