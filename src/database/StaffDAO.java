@@ -37,9 +37,6 @@ public class StaffDAO {
         }
     }
 
-    /**
-     * INSERT Waiter into database
-     */
     public boolean insertNurse(Nurse nurse) {
         String sql = "INSERT INTO staff (staff_id, name, salary, experience_years, staff_type, patients_assigned) " +
                 "VALUES (?, ?, ?, ?, 'NURSE', ?)";
@@ -64,14 +61,6 @@ public class StaffDAO {
         }
     }
 
-    // ========================================
-    // READ - SELECT OPERATIONS (Week 7)
-    // ========================================
-
-    /**
-     * SELECT ALL staff members
-     * @return List of Staff (Chef and Waiter objects)
-     */
     public List<Staff> getAllStaff() {
         List<Staff> staffList = new ArrayList<>();
         String sql = "SELECT * FROM staff ORDER BY staff_id";
@@ -105,9 +94,6 @@ public class StaffDAO {
         return staffList;
     }
 
-    /**
-     * SELECT staff by ID
-     */
     public Staff getStaffById(int staffId) {
         String sql = "SELECT * FROM staff WHERE staff_id = ?";
 
@@ -148,9 +134,6 @@ public class StaffDAO {
         return null;
     }
 
-    /**
-     * SELECT all Chefs
-     */
     public List<Doctor> getAllDoctors() {
         List<Doctor> doctors = new ArrayList<>();
         String sql = "SELECT * FROM staff WHERE staff_type = 'DOCTOR' ORDER BY staff_id";
@@ -184,9 +167,6 @@ public class StaffDAO {
         return doctors;
     }
 
-    /**
-     * SELECT all Waiters
-     */
     public List<Nurse> getAllNurse() {
         List<Nurse> nurses = new ArrayList<>();
         String sql = "SELECT * FROM staff WHERE staff_type = 'NURSE' ORDER BY staff_id";
@@ -220,13 +200,6 @@ public class StaffDAO {
         return nurses   ;
     }
 
-    // ========================================
-    // WEEK 8: UPDATE OPERATION
-    // ========================================
-
-    // CHEF from DB
-    // CHEF set change
-    // update chef
     public boolean updateDoctor(Doctor doctor) {
         String sql = "UPDATE staff SET name = ?, salary = ?, experience_years = ?, specialization = ? " +
                 "WHERE staff_id = ? AND staff_type = 'DOCTOR'";
@@ -262,11 +235,6 @@ public class StaffDAO {
         return false;
     }
 
-    /**
-     * UPDATE Waiter in database
-     object with updated data
-     * @return true if successful
-     */
     public boolean updateNurse(Nurse nurse) {
         String sql = "UPDATE staff SET name = ?, salary = ?, experience_years = ?, patients_assigned = ? " +
                 "WHERE staff_id = ? AND staff_type = 'NURSE'";
@@ -302,15 +270,6 @@ public class StaffDAO {
         return false;
     }
 
-    // ========================================
-    // WEEK 8: DELETE OPERATION
-    // ========================================
-
-    /**
-     * DELETE staff by ID
-     * @param staffId ID of staff to delete
-     * @return true if successful
-     */
     public boolean deleteStaff(int staffId) {
         String sql = "DELETE FROM staff WHERE staff_id = ?";
 
@@ -341,20 +300,9 @@ public class StaffDAO {
         return false;
     }
 
-    // ========================================
-    // WEEK 8: SEARCH BY NAME
-    // ========================================
-
-    /**
-     * SEARCH staff by name (partial match, case-insensitive)
-     * Example: searchByName("mur") finds "Murat", "Murray", etc.
-     * @param name Name or partial name to search
-     * @return List of matching staff
-     */
     public List<Staff> searchByName(String name) {
         List<Staff> staffList = new ArrayList<>();
 
-        // ILIKE for case-insensitive search, % for partial match
         String sql = "SELECT * FROM staff WHERE name ILIKE ? ORDER BY name";
 
         Connection connection = DatabaseConnection.getConnection();
@@ -388,16 +336,6 @@ public class StaffDAO {
         return staffList;
     }
 
-    // ========================================
-    // WEEK 8: SEARCH BY SALARY RANGE
-    // ========================================
-
-    /**
-     * SEARCH staff by salary range
-     * @param minSalary Minimum salary (inclusive)
-     * @param maxSalary Maximum salary (inclusive)
-     * @return List of staff in salary range
-     */
     public List<Staff> searchBySalaryRange(double minSalary, double maxSalary) {
         List<Staff> staffList = new ArrayList<>();
 
@@ -436,11 +374,6 @@ public class StaffDAO {
         return staffList;
     }
 
-    /**
-     * SEARCH staff with minimum salary
-     * @param minSalary Minimum salary
-     * @return List of staff earning at least minSalary
-     */
     public List<Staff> searchByMinSalary(double minSalary) {
         List<Staff> staffList = new ArrayList<>();
 
@@ -477,14 +410,6 @@ public class StaffDAO {
         return staffList;
     }
 
-    // ========================================
-    // HELPER METHOD
-    // ========================================
-
-    /**
-     * Extract Staff object from ResultSet
-     * Creates Chef or Waiter based on staff_type
-     */
     private Staff extractStaffFromResultSet(ResultSet resultSet) throws SQLException {
         int staffId = resultSet.getInt("staff_id");
         String name = resultSet.getString("name");
@@ -506,13 +431,6 @@ public class StaffDAO {
         return staff;
     }
 
-    // ========================================
-    // DISPLAY METHODS
-    // ========================================
-
-    /**
-     * Display all staff in console
-     */
     public void displayAllStaff() {
         List<Staff> staffList = getAllStaff();
 
@@ -534,9 +452,6 @@ public class StaffDAO {
         System.out.println("========================================\n");
     }
 
-    /**
-     * Demonstrate polymorphism with database data
-     */
     public void demonstratePolymorphism() {
         List<Staff> staffList = getAllStaff();
 
