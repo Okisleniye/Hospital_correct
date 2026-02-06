@@ -463,7 +463,7 @@ public class StaffDAO {
             System.out.println("No staff to demonstrate.");
         } else {
             for (Staff s : staffList) {
-                s.work();  // Polymorphic call!
+                s.work();
             }
         }
 
