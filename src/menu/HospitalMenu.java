@@ -8,11 +8,6 @@ import model.Staff;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * RestaurantMenu - Week 8
- * FULLY DATABASE-DRIVEN - No ArrayLists!
- * All data comes from PostgreSQL database
- */
 public class HospitalMenu implements Menu {
     private Scanner scanner;
     private StaffDAO staffDAO;
@@ -127,11 +122,6 @@ public class HospitalMenu implements Menu {
 
         scanner.close();
     }
-
-    // ========================================
-    // CREATE OPERATIONS
-    // ========================================
-
     private void addDoctor() {
         try {
             System.out.println("\n┌─ ADD DOCTOR ─────────────────────────────┐");
@@ -203,10 +193,6 @@ public class HospitalMenu implements Menu {
         }
     }
 
-    // ========================================
-    // READ OPERATIONS
-    // ========================================
-
     private void viewAllStaff() {
         staffDAO.displayAllStaff();
     }
@@ -257,10 +243,6 @@ public class HospitalMenu implements Menu {
         }
     }
 
-    // ========================================
-    // UPDATE OPERATION (Week 8)
-    // ========================================
-
     private void updateStaff() {
         System.out.println("\n┌─ UPDATE STAFF ─────────────────────────┐");
         System.out.print("│ Enter Staff ID to update: ");
@@ -269,7 +251,6 @@ public class HospitalMenu implements Menu {
             int staffId = scanner.nextInt();
             scanner.nextLine();
 
-            // First, get existing staff from database
             Staff existingStaff = staffDAO.getStaffById(staffId);
 
             if (existingStaff == null) {
@@ -277,12 +258,10 @@ public class HospitalMenu implements Menu {
                 return;
             }
 
-            // Display current info
             System.out.println("│ Current Info:");
             System.out.println("│ " + existingStaff.toString());
             System.out.println("└────────────────────────────────────────┘");
 
-            // Get new values
             System.out.println("\n┌─ ENTER NEW VALUES ─────────────────────┐");
             System.out.println("│ (Press Enter to keep current value)   │");
 
@@ -302,7 +281,6 @@ public class HospitalMenu implements Menu {
             int newExperience = expInput.trim().isEmpty() ?
                     existingStaff.getExperienceYears() : Integer.parseInt(expInput);
 
-            // Update based on type
             if (existingStaff instanceof Doctor) {
                 Doctor doctor = (Doctor) existingStaff;
                 System.out.print("│ New Specialization [" + doctor.getSpecialization() + "]: ");
@@ -334,10 +312,6 @@ public class HospitalMenu implements Menu {
         }
     }
 
-    // ========================================
-    // DELETE OPERATION (Week 8)
-    // ========================================
-
     private void deleteStaff() {
         System.out.println("\n┌─ DELETE STAFF ─────────────────────────┐");
         System.out.print("│ Enter Staff ID to delete: ");
@@ -346,7 +320,6 @@ public class HospitalMenu implements Menu {
             int staffId = scanner.nextInt();
             scanner.nextLine();
 
-            // First, show who will be deleted
             Staff staff = staffDAO.getStaffById(staffId);
 
             if (staff == null) {
@@ -373,10 +346,6 @@ public class HospitalMenu implements Menu {
         }
     }
 
-    // ========================================
-    // SEARCH OPERATIONS (Week 8)
-    // ========================================
-
     private void searchByName() {
         System.out.println("\n┌─ SEARCH BY NAME ───────────────────────┐");
         System.out.print("│ Enter name to search: ");
@@ -387,7 +356,6 @@ public class HospitalMenu implements Menu {
 
         displaySearchResults(results, "Search: '" + name + "'");
     }
-
     private void searchBySalaryRange() {
         try {
             System.out.println("\n┌─ SEARCH BY SALARY RANGE ───────────────┐");
@@ -448,17 +416,9 @@ public class HospitalMenu implements Menu {
         }
     }
 
-    // ========================================
-    // POLYMORPHISM DEMO
-    // ========================================
-
     private void demonstratePolymorphism() {
         staffDAO.demonstratePolymorphism();
     }
-
-    // ========================================
-    // HELPER METHOD
-    // ========================================
 
     private void pressEnterToContinue() {
         System.out.println("\n[Press Enter to continue...]");
